@@ -59,7 +59,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 
 - (void)setFilePath:(NSString *)filePath {
   RNDocPreviewItem *previewItem = [[RNDocPreviewItem alloc] init];
-  previewItem.previewItemURL = [NSURL URLWithString:filePath];
+  if ([filePath hasPrefix:@"file://"] || [filePath hasPrefix:@"/"]) {
+    previewItem.previewItemURL = [NSURL fileURLWithPath:filePath];
+  } else {
+    previewItem.previewItemURL = [NSURL URLWithString:filePath];
+  }
   if ([QLPreviewController canPreviewItem:previewItem]) {
     _previewItem = previewItem;
   } else {
