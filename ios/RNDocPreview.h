@@ -14,7 +14,7 @@
 @interface RNDocPreview : RCTView
 
 /**
- file local path
+ file path
  */
 @property (nonatomic, strong) NSString * filePath;
 
