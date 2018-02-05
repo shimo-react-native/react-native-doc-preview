@@ -18,9 +18,7 @@
 #import <React/RCTUIManagerUtils.h>
 #endif
 
-
-
-@interface RNDocPreview() <QLPreviewControllerDataSource, QLPreviewControllerDelegate, RCTInvalidating> {
+@interface RNDocPreview() <QLPreviewControllerDataSource, RCTInvalidating> {
   __weak RCTBridge *_bridge;
 }
 
@@ -40,9 +38,7 @@
 
     _previewController = [[QLPreviewController alloc] init];
     _previewController.dataSource = self;
-    _previewController.navigationController.navigationBar.userInteractionEnabled = YES;
-    _previewController.view.userInteractionEnabled = YES;
-
+    
     UIView *view = _previewController.view;
     view.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -75,6 +71,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 #pragma mark - RCTInvalidating
 
 - (void)invalidate {
+  UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
+  if ([NSStringFromClass(window.class) isEqualToString:@"UIRemoteKeyboardWindow"]) {
+    [window setHidden:YES];
+  }
+  
   _previewController.dataSource = nil;
   _previewController = nil;
 }
