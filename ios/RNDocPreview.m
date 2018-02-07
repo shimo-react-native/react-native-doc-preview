@@ -71,13 +71,16 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 #pragma mark - RCTInvalidating
 
 - (void)invalidate {
-  UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
-  if ([NSStringFromClass(window.class) isEqualToString:@"UIRemoteKeyboardWindow"]) {
-    [window setHidden:YES];
-  }
-  
   _previewController.dataSource = nil;
   _previewController = nil;
+  
+  // must add delay, or it will show keyboard window again.
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.02 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
+    if ([NSStringFromClass(window.class) isEqualToString:@"UIRemoteKeyboardWindow"]) {
+      [window setHidden:YES];
+    }
+  });
 }
 
 #pragma mark - QLPreviewControllerDataSource
