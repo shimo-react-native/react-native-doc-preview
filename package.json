@@ -1,6 +1,6 @@
 {
   "name": "react-native-doc-preview",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A document previewer for react native.",
   "main": "index.js",
   "scripts": {
